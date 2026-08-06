@@ -100,17 +100,18 @@ app.post('/download-sources/changes', (req, res) => {
   return res.json([]);
 });
 
-// --- 6. ROTAS DE CATÁLOGO PARA O HYDRA LAUNCHER ---
+// --- 6. ROTAS DE CATÁLOGO (Com estruturas seguras para arrays) ---
 
-// Jogos populares (usado na aba inicial)
 app.get('/api/catalogue/hot', async (req, res) => {
   try {
     return res.json([
       {
         id: "1",
         title: "Jogo Exemplo Popular",
-        coverUrl: "https://via.placeholder.com/300",
-        rating: 90
+        coverUrl: "",
+        downloads: [],
+        genres: [],
+        tags: []
       }
     ]);
   } catch (err) {
@@ -118,7 +119,6 @@ app.get('/api/catalogue/hot', async (req, res) => {
   }
 });
 
-// Jogos em destaque
 app.get('/api/catalogue/featured', async (req, res) => {
   try {
     return res.json([]);
@@ -127,7 +127,6 @@ app.get('/api/catalogue/featured', async (req, res) => {
   }
 });
 
-// Pesquisa de jogos (o launcher envia um POST para cá)
 app.post('/api/catalogue/search', async (req, res) => {
   const { query } = req.body;
   try {
