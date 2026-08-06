@@ -100,22 +100,22 @@ app.post('/download-sources/changes', (req, res) => {
   return res.json([]);
 });
 
-// --- 6. ROTAS DE CATÁLOGO (Com estruturas seguras para arrays) ---
+// --- 6. ROTAS DE CATÁLOGO COMPATÍVEIS COM O HYDRA ---
 
 app.get('/api/catalogue/hot', async (req, res) => {
   try {
     return res.json([
       {
-        id: "1",
-        title: "Jogo Exemplo Popular",
-        coverUrl: "",
-        downloads: [],
-        genres: [],
-        tags: []
+        objectID: "exemplo-1",
+        title: "Meu Jogo Personalizado",
+        coverUrl: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1wyy.png",
+        shop: "steam",
+        rating: 95,
+        downloads: []
       }
     ]);
   } catch (err) {
-    return res.status(500).json({ error: 'Erro ao buscar jogos populares' });
+    return res.status(500).json({ error: 'Erro ao buscar populares' });
   }
 });
 
@@ -123,16 +123,15 @@ app.get('/api/catalogue/featured', async (req, res) => {
   try {
     return res.json([]);
   } catch (err) {
-    return res.status(500).json({ error: 'Erro ao buscar jogos em destaque' });
+    return res.status(500).json({ error: 'Erro ao buscar destaques' });
   }
 });
 
 app.post('/api/catalogue/search', async (req, res) => {
-  const { query } = req.body;
   try {
     return res.json([]);
   } catch (err) {
-    return res.status(500).json({ error: 'Erro na busca de jogos' });
+    return res.status(500).json({ error: 'Erro na busca' });
   }
 });
 
