@@ -72,7 +72,7 @@ app.post('/auth/refresh', async (req, res) => {
 
 // 3. Rota de Logout
 app.post('/auth/logout', (req, res) => {
-  return res.json({ message: 'Desconectado do mkzeira launcher com sucesso' });
+  return res.json({ message: 'Desconectado com sucesso' });
 });
 
 // 4. Rota de Perfil
@@ -100,22 +100,27 @@ app.post('/download-sources/changes', (req, res) => {
   return res.json([]);
 });
 
-// --- 6. ROTAS DE CATÁLOGO COMPATÍVEIS COM O HYDRA ---
+// --- 6. CATÁLOGO COMPATÍVEL COM O HYDRA ---
 
 app.get('/api/catalogue/hot', async (req, res) => {
   try {
+    // Retorna uma lista de jogos estruturada para evitar erros de propriedade nula
     return res.json([
       {
-        objectID: "exemplo-1",
-        title: "Meu Jogo Personalizado",
-        coverUrl: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1wyy.png",
+        objectID: "1",
+        title: "Cyberpunk 2077 (Exemplo)",
+        coverUrl: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2mvt.png",
         shop: "steam",
-        rating: 95,
-        downloads: []
+        rating: 90,
+        downloads: [],
+        genres: ["RPG", "Ação"],
+        tags: ["Cyberpunk", Mundo Aberto"],
+        screenshots: [],
+        fileSize: "70 GB"
       }
     ]);
   } catch (err) {
-    return res.status(500).json({ error: 'Erro ao buscar populares' });
+    return res.status(500).json({ error: 'Erro ao buscar catálogo hot' });
   }
 });
 
@@ -128,10 +133,12 @@ app.get('/api/catalogue/featured', async (req, res) => {
 });
 
 app.post('/api/catalogue/search', async (req, res) => {
+  const { query } = req.body;
   try {
+    // Aqui no futuro você pode filtrar os jogos do seu banco usando o `query`
     return res.json([]);
   } catch (err) {
-    return res.status(500).json({ error: 'Erro na busca' });
+    return res.status(500).json({ error: 'Erro na busca do catálogo' });
   }
 });
 
@@ -139,5 +146,5 @@ app.post('/api/catalogue/search', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor mkzeira launcher rodando na porta ${PORT}`);
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
