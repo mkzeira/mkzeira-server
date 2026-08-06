@@ -104,7 +104,6 @@ app.post('/download-sources/changes', (req, res) => {
 
 app.get('/api/catalogue/hot', async (req, res) => {
   try {
-    // Retorna uma lista de jogos estruturada para evitar erros de propriedade nula
     return res.json([
       {
         objectID: "1",
@@ -114,7 +113,7 @@ app.get('/api/catalogue/hot', async (req, res) => {
         rating: 90,
         downloads: [],
         genres: ["RPG", "Ação"],
-        tags: ["Cyberpunk", Mundo Aberto"],
+        tags: ["Cyberpunk", "Mundo Aberto"],
         screenshots: [],
         fileSize: "70 GB"
       }
@@ -133,9 +132,7 @@ app.get('/api/catalogue/featured', async (req, res) => {
 });
 
 app.post('/api/catalogue/search', async (req, res) => {
-  const { query } = req.body;
   try {
-    // Aqui no futuro você pode filtrar os jogos do seu banco usando o `query`
     return res.json([]);
   } catch (err) {
     return res.status(500).json({ error: 'Erro na busca do catálogo' });
