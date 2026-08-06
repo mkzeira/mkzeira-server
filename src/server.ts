@@ -102,7 +102,7 @@ app.post('/download-sources/changes', (req, res) => {
 
 // --- 6. CATÁLOGO BLINDADO PARA O HYDRA ---
 
-app.get('/api/catalogue/hot', async (req, res) => {
+app.get('/catalogue/hot', async (req, res) => {
   try {
     return res.json([
       {
@@ -129,7 +129,7 @@ app.get('/api/catalogue/hot', async (req, res) => {
   }
 });
 
-app.get('/api/catalogue/featured', async (req, res) => {
+app.get('/catalogue/featured', async (req, res) => {
   try {
     return res.json([]);
   } catch (err) {
@@ -137,7 +137,7 @@ app.get('/api/catalogue/featured', async (req, res) => {
   }
 });
 
-app.post('/api/catalogue/search', async (req, res) => {
+app.post('/catalogue/search', async (req, res) => {
   try {
     return res.json([]);
   } catch (err) {
