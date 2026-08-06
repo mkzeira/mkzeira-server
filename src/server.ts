@@ -100,6 +100,45 @@ app.post('/download-sources/changes', (req, res) => {
   return res.json([]);
 });
 
+// --- 6. ROTAS DE CATÁLOGO PARA O HYDRA LAUNCHER ---
+
+// Jogos populares (usado na aba inicial)
+app.get('/api/catalogue/hot', async (req, res) => {
+  try {
+    return res.json([
+      {
+        id: "1",
+        title: "Jogo Exemplo Popular",
+        coverUrl: "https://via.placeholder.com/300",
+        rating: 90
+      }
+    ]);
+  } catch (err) {
+    return res.status(500).json({ error: 'Erro ao buscar jogos populares' });
+  }
+});
+
+// Jogos em destaque
+app.get('/api/catalogue/featured', async (req, res) => {
+  try {
+    return res.json([]);
+  } catch (err) {
+    return res.status(500).json({ error: 'Erro ao buscar jogos em destaque' });
+  }
+});
+
+// Pesquisa de jogos (o launcher envia um POST para cá)
+app.post('/api/catalogue/search', async (req, res) => {
+  const { query } = req.body;
+  try {
+    return res.json([]);
+  } catch (err) {
+    return res.status(500).json({ error: 'Erro na busca de jogos' });
+  }
+});
+
+// --------------------------------------------------
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor mkzeira launcher rodando na porta ${PORT}`);
