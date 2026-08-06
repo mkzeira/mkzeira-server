@@ -100,7 +100,7 @@ app.post('/download-sources/changes', (req, res) => {
   return res.json([]);
 });
 
-// --- 6. CATÁLOGO COMPATÍVEL COM O HYDRA ---
+// --- 6. CATÁLOGO BLINDADO PARA O HYDRA ---
 
 app.get('/api/catalogue/hot', async (req, res) => {
   try {
@@ -111,7 +111,13 @@ app.get('/api/catalogue/hot', async (req, res) => {
         coverUrl: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2mvt.png",
         shop: "steam",
         rating: 90,
-        downloads: [],
+        downloads: [
+          {
+            uri: "magnet:?xt=urn:btih:exemplo",
+            name: "Exemplo Repack",
+            fileSize: "70 GB"
+          }
+        ],
         genres: ["RPG", "Ação"],
         tags: ["Cyberpunk", "Mundo Aberto"],
         screenshots: [],
