@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import axios from 'axios';
 import { Pool } from 'pg';
 import { searchGamesFromIGDB } from './igdb';
 
@@ -18,8 +19,93 @@ const pool = new Pool({
 
 const JWT_SECRET = process.env.JWT_SECRET || 'mkzeira_launcher_jwt_secret_2026';
 
+interface JogoDados {
+  nome: string;
+  resumo: string;
+  capa: string;
+  background: string;
+  logo: string;
+}
+
 app.get('/', (req, res) => {
   return res.json({ message: '🚀 Server mkzeira launcher ON!' });
+});
+
+app.get('/api/buscar-jogo', async (req, res): Promise<any> => {
+  const nome = req.query.nome as string;
+
+  if (!nome) {
+    return res.status(400).json({ error: 'O nome do jogo é obrigatório.' });
+  }
+
+  const dadosFinais: JogoDados = {
+    nome: nome,
+    resumo: '',
+    capa: '',
+    background: '',
+    logo: ''
+  };
+
+  try {
+    try {
+      const oauthRes = await axios.post(
+        `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&grant_type=client_credentials`
+      );
+      const token = oauthRes.data.access_token;
+
+      const igdbRes = await axios.post(
+        `${process.env.IGDB_API_URL}/games`,
+        `search "${nome}"; fields name, summary; limit 1;`,
+        {
+          headers: {
+            'Client-ID': process.env.TWITCH_CLIENT_ID || '',
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'text/plain',
+          },
+        }
+      );
+
+      if (igdbRes.data && igdbRes.data.length > 0) {
+        dadosFinais.resumo = igdbRes.data[0].summary || '';
+      }
+    } catch (igdbError: any) {
+      console.error('Erro IGDB:', igdbError.message);
+    }
+
+    try {
+      const sgdbSearch = await axios.get(
+        `${process.env.STEAMGRIDDB_API_URL}/search/autocomplete?term=${encodeURIComponent(nome)}`,
+        { headers: { 'Authorization': `Bearer ${process.env.STEAMGRIDDB_API_KEY}` } }
+      );
+
+      if (sgdbSearch.data.success && sgdbSearch.data.data.length > 0) {
+        const jogoId = sgdbSearch.data.data[0].id;
+
+        const [gridsRes, heroesRes, logosRes] = await Promise.all([
+          axios.get(`${process.env.STEAMGRIDDB_API_URL}/grids/game/${jogoId}?dimensions=600x900`, { headers: { 'Authorization': `Bearer ${process.env.STEAMGRIDDB_API_KEY}` } }).catch(() => null),
+          axios.get(`${process.env.STEAMGRIDDB_API_URL}/heroes/game/${jogoId}`, { headers: { 'Authorization': `Bearer ${process.env.STEAMGRIDDB_API_KEY}` } }).catch(() => null),
+          axios.get(`${process.env.STEAMGRIDDB_API_URL}/logos/game/${jogoId}`, { headers: { 'Authorization': `Bearer ${process.env.STEAMGRIDDB_API_KEY}` } }).catch(() => null)
+        ]);
+
+        if (gridsRes?.data?.success && gridsRes.data.data.length > 0) {
+          dadosFinais.capa = gridsRes.data.data[0].url;
+        }
+        if (heroesRes?.data?.success && heroesRes.data.data.length > 0) {
+          dadosFinais.background = heroesRes.data.data[0].url;
+        }
+        if (logosRes?.data?.success && logosRes.data.data.length > 0) {
+          dadosFinais.logo = logosRes.data.data[0].url;
+        }
+      }
+    } catch (sgdbError: any) {
+      console.error('Erro SteamGridDB:', sgdbError.message);
+    }
+
+    return res.json(dadosFinais);
+
+  } catch (error) {
+    return res.status(500).json({ error: 'Erro interno ao processar dados de mídia do jogo.' });
+  }
 });
 
 app.post('/auth/login', async (req, res) => {
