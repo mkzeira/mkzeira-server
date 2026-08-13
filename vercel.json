@@ -1,9 +1,27 @@
 {
   "version": 2,
   "builds": [
-    { "src": "src/server.ts", "use": "@vercel/node" }
+    {
+      "src": "src/server.ts",
+      "use": "@vercel/node"
+    }
   ],
-  "routes": [
-    { "src": "/(.*)", "dest": "src/server.ts" }
+  "rewrites": [
+    {
+      "source": "/api/catálogo/hot",
+      "destination": "/catalogue/hot"
+    },
+    {
+      "source": "/api/catálogo/destaques",
+      "destination": "/catalogue/featured"
+    },
+    {
+      "source": "/api/catálogo/pesquisa",
+      "destination": "/catalogue/search"
+    },
+    {
+      "source": "/api/catálogo/filtro",
+      "destination": "/catalogue/filters"
+    }
   ]
 }
