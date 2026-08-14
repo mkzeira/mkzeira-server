@@ -170,17 +170,18 @@ app.post('/download-sources/changes', (req, res) => {
   return res.json([]);
 });
 
-app.get('/catalogue/hot', async (req, res) => {
+// Rotas atualizadas com o padrão exato que o Hydra Launcher consome
+app.get('/api/catálogo/hot', async (req, res) => {
   const games = await searchGamesFromIGDB();
   return res.json(games);
 });
 
-app.get('/catalogue/featured', async (req, res) => {
+app.get('/api/catálogo/destaques', async (req, res) => {
   const games = await searchGamesFromIGDB();
   return res.json(games);
 });
 
-app.post('/catalogue/search', async (req, res) => {
+app.post('/api/catálogo/pesquisa', async (req, res) => {
   const { query } = req.body;
   const games = await searchGamesFromIGDB(query || '');
   return res.json(games);
