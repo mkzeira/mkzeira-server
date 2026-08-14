@@ -170,16 +170,17 @@ app.post('/download-sources/changes', (req, res) => {
   return res.json([]);
 });
 
-// Rotas atualizadas com o padrão exato que o Hydra Launcher consome
 app.get('/api/catálogo/hot', async (req, res) => {
   const games = await searchGamesFromIGDB();
   return res.json(games);
 });
 
+// --- ROTA MODIFICADA PARA DAR ERRO DE PROPÓSITO ---
 app.get('/api/catálogo/destaques', async (req, res) => {
-  const games = await searchGamesFromIGDB();
-  return res.json(games);
+  // Se o Hydra conectar aqui, ele receberá este erro 500
+  return res.status(500).json({ error: 'TESTE DE COMUNICAÇÃO ATIVO. SE O HYDRA MOSTRAR ISSO, ELE CONECTOU.' });
 });
+// ---------------------------------------------------
 
 app.post('/api/catálogo/pesquisa', async (req, res) => {
   const { query } = req.body;
@@ -189,5 +190,5 @@ app.post('/api/catálogo/pesquisa', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+  console.log(`🚀 Servidor mkzeira launcher rodando na porta ${PORT}`);
 });
