@@ -8,16 +8,20 @@
   ],
   "rewrites": [
     {
-      "source": "/api/catálogo/destaques",
-      "destination": "/catalogue/featured"
-    },
-    {
       "source": "/api/catálogo/hot",
       "destination": "/catalogue/hot"
     },
     {
+      "source": "/api/catálogo/destaques",
+      "destination": "/catalogue/featured"
+    },
+    {
       "source": "/api/catálogo/pesquisa",
       "destination": "/catalogue/search"
+    },
+    {
+      "source": "/api/catálogo/filtro",
+      "destination": "/catalogue/filters"
     }
   ]
 }
